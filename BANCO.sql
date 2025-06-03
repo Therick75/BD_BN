@@ -195,6 +195,19 @@ CREATE TABLE retiro (
     fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (num_cuenta) REFERENCES cuentas(num_cuenta)
 );
+-- --------------------------------------
+
+-- CREATE USER 'cliente_app'@'localhost' IDENTIFIED BY 'cliente123';
+-- CREATE USER 'admin_app'@'localhost' IDENTIFIED BY 'admin123';
+
+-- Privilegios
+GRANT SELECT, INSERT, UPDATE ON banco.* TO 'cliente_app'@'localhost';
+GRANT ALL PRIVILEGES ON banco.* TO 'admin_app'@'localhost';
+
+-- 4.3. Creación de índices
+CREATE INDEX idx_bancos_name ON bancos(nombre_banco);
+CREATE INDEX idx_empresas_s ON empresas_servicios(nombre_empresa);
+CREATE INDEX idx_ubicacion ON ubicaciones_banco(distrito, direccion);
 
 -- funciones
 delimiter //
@@ -510,9 +523,6 @@ BEGIN
         VALUES (p_cuenta, p_id_deuda);
         -- Actualizar saldo
         UPDATE cuentas SET saldo = saldo - monto_a_pagar WHERE num_cuenta = p_cuenta;
-        -- Insertar en historial
-        INSERT INTO historial (num_cuenta, tipo_operacion, descripcion, monto)
-        VALUES (p_cuenta, 'Pago de Servicio', CONCAT('Pago deuda ID ', p_id_deuda), monto_a_pagar);
     ELSE
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Saldo insuficiente para pago de servicio';
     END IF;
