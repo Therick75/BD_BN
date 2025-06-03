@@ -1,0 +1,12 @@
+select * from usuarios;
+select * from cuentas;
+select * from ubicacion_usuario;
+select * from historial;
+call ver_saldo("87654321");
+call sp_deposito("04000654321",500.00);
+SHOW PROCEDURE STATUS WHERE db ="banco";
+call transferir_cuenta_a_cuenta("04000654321","04000345678", 100, "Para tu pollo");
+call transferir_cci("04000654321","60000123456789000002",100,"no se");
+CALL realizar_retiro("04000654321",100);
+show tables;
+select * from ubicacion_usuario; 
